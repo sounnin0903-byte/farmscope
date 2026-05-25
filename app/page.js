@@ -5,10 +5,10 @@ import dynamic from 'next/dynamic';
 const MapView = dynamic(() => import('./components/MapView'), { ssr: false });
 
 const DEFAULT_FARMS = [
-  { id: 1, name: '1번 논',      loc: '충남 논산시 연산면', crop: '벼',  emoji: '🌾', type: '논',    pnu: '44100250222101350000', lat: 36.18,  lon: 127.07,  region: '충남' },
-  { id: 2, name: '2번 밭',      loc: '충남 논산시 연산면', crop: '배추', emoji: '🥬', type: '밭',    pnu: '44100250222101360000', lat: 36.181, lon: 127.071, region: '충남' },
-  { id: 3, name: '3번 과수원',  loc: '충남 논산시 탑촌리', crop: '사과', emoji: '🍎', type: '과수원', pnu: '44100250222101370000', lat: 36.179, lon: 127.068, region: '충남' },
-  { id: 4, name: '4번 시설재배',loc: '충남 논산시 가야면', crop: '딸기', emoji: '🍓', type: '시설',  pnu: '44100250222101380000', lat: 36.17,  lon: 127.06,  region: '충남' },
+  { id: 1, name: '1번 논',      loc: '충남 논산시 연산면 고정리', crop: '벼',  emoji: '🌾', type: '논',    pnu: '44100250222101350000', lat: 36.18,  lon: 127.07,  region: '충남' },
+  { id: 2, name: '2번 밭',      loc: '충남 논산시 연산면 청동리', crop: '배추', emoji: '🥬', type: '밭',    pnu: '44100250222101360000', lat: 36.185, lon: 127.075, region: '충남' },
+  { id: 3, name: '3번 과수원',  loc: '충남 논산시 가야곡면 두월리', crop: '사과', emoji: '🍎', type: '과수원', pnu: '44100250222101370000', lat: 36.25,  lon: 127.01,  region: '충남' },
+  { id: 4, name: '4번 시설재배',loc: '충남 논산시 부적면 덕평리', crop: '딸기', emoji: '🍓', type: '시설',  pnu: '44100250222101380000', lat: 36.17,  lon: 127.05,  region: '충남' },
 ];
 
 const CROPS = [
