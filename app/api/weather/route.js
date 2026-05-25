@@ -28,14 +28,15 @@ function latLonToGrid(lat, lon) {
 
 function getBaseDateTime() {
   const now = new Date();
+  const kst = new Date(now.getTime() + 9 * 60 * 60 * 1000);
   const hours = [2, 5, 8, 11, 14, 17, 20, 23];
-  const h = now.getHours();
+  const h = kst.getUTCHours();
   let baseHour = [...hours].reverse().find(t => t <= h) ?? 23;
-  const base = new Date(now);
-  if (baseHour === 23 && h < 23) base.setDate(base.getDate() - 1);
+  const base = new Date(kst);
+  if (baseHour === 23 && h < 23) base.setUTCDate(base.getUTCDate() - 1);
   const p = n => String(n).padStart(2, '0');
   return {
-    base_date: `${base.getFullYear()}${p(base.getMonth() + 1)}${p(base.getDate())}`,
+    base_date: `${base.getUTCFullYear()}${p(base.getUTCMonth() + 1)}${p(base.getUTCDate())}`,
     base_time: `${p(baseHour)}00`,
   };
 }
@@ -92,10 +93,11 @@ export async function GET(request) {
       skyEmoji,
     };
 
-    // 날짜별 주간 예보 계산
+    // 날짜별 주간 예보 계산 (KST 기준)
     const now = new Date();
+    const kstNow = new Date(now.getTime() + 9 * 60 * 60 * 1000);
     const p = n => String(n).padStart(2, '0');
-    const todayStr = `${now.getFullYear()}${p(now.getMonth() + 1)}${p(now.getDate())}`;
+    const todayStr = `${kstNow.getUTCFullYear()}${p(kstNow.getUTCMonth() + 1)}${p(kstNow.getUTCDate())}`;
 
     const dates = [...new Set(items.map(i => i.fcstDate))].sort();
 

@@ -235,7 +235,7 @@ body {
 .b-alert { padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; background: rgba(200,120,64,.15); border: 1px solid rgba(200,120,64,.3); color: var(--orange); }
 
 /* Soil */
-.soil-section { background: var(--bg-2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 12px; }
+.soil-section { background: var(--bg-2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-top: 12px; margin-bottom: 12px; }
 .soil-meta { padding: 8px 10px; background: var(--bg-3); border-radius: 6px; margin-bottom: 12px; font-size: 11px; color: var(--text-muted); line-height: 1.5; }
 .soil-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
 .soil-card { background: var(--bg-3); border-radius: 8px; padding: 12px; text-align: center; }
