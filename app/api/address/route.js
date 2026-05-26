@@ -42,7 +42,6 @@ export async function GET(request) {
   if (!query) return NextResponse.json({ error: 'query required' }, { status: 400 });
 
   const KAKAO_KEY  = process.env.KAKAO_API_KEY;
-  const VWORLD_KEY = process.env.VWORLD_API_KEY;
 
   if (!KAKAO_KEY) {
     console.log('[address] KAKAO_KEY 없음 → mock');
@@ -78,19 +77,7 @@ export async function GET(request) {
       docs.slice(0, 5).map(async (doc) => {
         const lat = parseFloat(doc.y);
         const lon = parseFloat(doc.x);
-        let pnu = null;
-
-        if (VWORLD_KEY) {
-          try {
-            const vwRes = await fetch(
-              `https://api.vworld.kr/req/data?service=data&request=GetFeature&data=LP_PA_CBND_BUBUN&key=${VWORLD_KEY}` +
-              `&geomfilter=POINT(${lon} ${lat})&fields=pnu,addr_gb&geometry=false&attribute=true&crs=EPSG:4326&format=json`
-            );
-            const vwData = await vwRes.json();
-            console.log('[vworld] 응답:', JSON.stringify(vwData).slice(0, 400));
-            pnu = vwData?.response?.result?.featureCollection?.features?.[0]?.properties?.pnu ?? null;
-          } catch (e) { console.log('[vworld] 오류:', e.message); }
-        }
+        let pnu = null; // 브라우저에서 직접 VWorld 호출로 PNU 조회
 
         const addr = doc.address ?? doc.road_address ?? {};
         return {
