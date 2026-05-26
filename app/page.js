@@ -681,7 +681,12 @@ export default function Home() {
       lon:     pickedParcel.lon,
       region:  pickedParcel.region,
     };
-    const alreadySaved = farms.some(f => f.pnu === pickedParcel.pnu && f.crop === pickedCrop);
+    const alreadySaved = farms.some(f => {
+      const sameLocation = f.pnu && pickedParcel.pnu
+        ? f.pnu === pickedParcel.pnu
+        : f.loc === pickedParcel.address;
+      return sameLocation && f.crop === pickedCrop;
+    });
     if (!alreadySaved) {
       const nextId = farms.length + 1;
       setFarms(prev => [...prev, {
@@ -1021,7 +1026,12 @@ export default function Home() {
                       )}
                     </div>
 
-                    {farms.some(f => f.pnu === pickedParcel?.pnu && f.crop === pickedCrop)
+                    {farms.some(f => {
+                      const sameLocation = f.pnu && pickedParcel?.pnu
+                        ? f.pnu === pickedParcel.pnu
+                        : f.loc === pickedParcel?.address;
+                      return sameLocation && f.crop === pickedCrop;
+                    })
                       ? (
                         <div style={{ textAlign: 'center', fontSize: 13, color: 'var(--green-text)', fontWeight: 700, padding: '10px 0', letterSpacing: 0.3 }}>
                           ✓ 이미 등록됨
