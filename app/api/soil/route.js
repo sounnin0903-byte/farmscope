@@ -1012,9 +1012,9 @@ function toLandCat(type) {
 }
 
 // 시도·지목 기반 지역 평균값 + PNU로 필지별 미세 변동
-function mockByRegion(pnu, landType) {
-  const sigungu = pnu?.slice(0, 5) ?? '00000';
-  const sido    = pnu?.slice(0, 2) ?? '00';
+function mockByRegion(pnu, landType, bjdCode) {
+  const sigungu = pnu?.slice(0, 5) ?? bjdCode?.slice(0, 5) ?? '00000';
+  const sido    = pnu?.slice(0, 2) ?? bjdCode?.slice(0, 2) ?? '00';
   const cat     = toLandCat(landType);
   const base    = (REGION_SOIL[sigungu] ?? REGION_SOIL[sido] ?? REGION_SOIL.default)[cat];
   const seed = parseInt(pnu?.slice(-2) ?? '50', 10) || 50;
@@ -1084,8 +1084,8 @@ async function fetchByBjdCode(KEY, bjdCode) {
   } : null;
 }
 
-function buildMockResponse(pnu, landType, crop) {
-  const m = mockByRegion(pnu, landType);
+function buildMockResponse(pnu, landType, crop, bjdCode) {
+  const m = mockByRegion(pnu, landType, bjdCode);
   return {
     examYear: '2022',
     pH:   m.pH,   phStatus: status(m.pH,   5.5, 7.0),
@@ -1112,7 +1112,7 @@ export async function GET(request) {
   console.log('[soil] pnu:', pnu, 'bjdCode:', bjdCode, 'type:', landType, 'crop:', crop);
 
   if (!KEY || !validPnu) {
-    return NextResponse.json(buildMockResponse(pnu, landType, crop));
+    return NextResponse.json(buildMockResponse(pnu, landType, crop, bjdCode));
   }
 
   try {
@@ -1155,7 +1155,7 @@ export async function GET(request) {
     }
 
     if (!item) {
-      return NextResponse.json(buildMockResponse(pnu, landType, crop));
+      return NextResponse.json(buildMockResponse(pnu, landType, crop, bjdCode));
     }
 
     const pH   = parseFloat(item.ph     ?? 6.5);
@@ -1176,6 +1176,6 @@ export async function GET(request) {
       fertilizer: calcFertilizer(crop, { om, phos, k }),
     });
   } catch (err) {
-    return NextResponse.json({ ...buildMockResponse(pnu, landType), error: err.message });
+    return NextResponse.json({ ...buildMockResponse(pnu, landType, crop, bjdCode), error: err.message });
   }
 }
