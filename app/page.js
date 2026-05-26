@@ -745,26 +745,6 @@ export default function Home() {
     }
   }
 
-  async function fetchPnu(lat, lon) {
-    const KEY = process.env.NEXT_PUBLIC_VWORLD_API_KEY;
-    if (!KEY) return null;
-    try {
-      const res = await fetch(
-        `https://api.vworld.kr/req/data?service=data&request=GetFeature&data=LP_PA_CBND_BUBUN&key=${KEY}` +
-        `&geomfilter=POINT(${lon} ${lat})&fields=pnu,addr_gb&geometry=false&attribute=true&crs=EPSG:4326&format=json`
-      );
-      const data = await res.json();
-      return data?.response?.result?.featureCollection?.features?.[0]?.properties?.pnu ?? null;
-    } catch { return null; }
-  }
-
-  async function pickParcel(r) {
-    setPickedParcel(r);
-    setPickedCrop(null);
-    const pnu = await fetchPnu(r.lat, r.lon);
-    if (pnu) setPickedParcel(prev => prev && prev.lat === r.lat ? { ...r, pnu } : prev);
-  }
-
   async function searchAddr() {
     if (!searchQuery.trim()) return;
     setPickedParcel(null); setPickedCrop(null);
@@ -882,7 +862,7 @@ export default function Home() {
                 <div
                   key={i}
                   className={`search-result-item${pickedParcel === r ? ' selected' : ''}`}
-                  onClick={() => pickParcel(r)}
+                  onClick={() => { setPickedParcel(r); setPickedCrop(null); }}
                 >
                   <div style={{ fontSize: 16 }}>
                     {r.type === '논' ? '🌾' : r.type === '밭' ? '🥬' : r.type === '과수원' ? '🍎' : '🏡'}
@@ -906,7 +886,7 @@ export default function Home() {
               <MapView
                 results={searchResults}
                 picked={pickedParcel}
-                onPick={(r) => pickParcel(r)}
+                onPick={(r) => { setPickedParcel(r); setPickedCrop(null); }}
               />
               <div className="map-bar">
                 <div>

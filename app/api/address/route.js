@@ -77,15 +77,19 @@ export async function GET(request) {
       docs.slice(0, 5).map(async (doc) => {
         const lat = parseFloat(doc.y);
         const lon = parseFloat(doc.x);
-        let pnu = null; // 브라우저에서 직접 VWorld 호출로 PNU 조회
 
         const addr = doc.address ?? doc.road_address ?? {};
+        const bCode  = addr.b_code ?? null;
+        const mainNo = (addr.main_address_no ?? '0').padStart(4, '0');
+        const subNo  = (addr.sub_address_no  ?? '0').padStart(4, '0');
+        const pnu = bCode ? `${bCode}1${mainNo}${subNo}` : null;
+
         return {
           address: doc.address_name ?? doc.place_name,
           type:    '논/밭',
           area:    '-',
           pnu,
-          bjdCode: addr.b_code ?? null,
+          bjdCode: bCode,
           lat, lon,
           region: addr.region_1depth_name ?? doc.address_name?.split(' ')[0] ?? '',
         };
