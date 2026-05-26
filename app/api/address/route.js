@@ -82,10 +82,11 @@ export async function GET(request) {
 
         if (VWORLD_KEY) {
           try {
+            const origin = new URL(request.url).origin;
             const vwRes = await fetch(
               `https://api.vworld.kr/req/data?service=data&request=GetFeature&data=LP_PA_CBND_BUBUN&key=${VWORLD_KEY}` +
               `&geomfilter=POINT(${lon} ${lat})&fields=pnu,addr_gb&geometry=false&attribute=true&crs=EPSG:4326&format=json`,
-              { headers: { Referer: 'http://localhost:3000' } }
+              { headers: { Referer: origin } }
             );
             const vwData = await vwRes.json();
             console.log('[vworld] 응답:', JSON.stringify(vwData).slice(0, 400));
